@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Himpunan</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .operations {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 4px;
+        }
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Himpunan Sederhana</h1>
+        
+        <div class="instructions">
+            <p>Petunjuk: Masukkan elemen himpunan dipisahkan dengan koma. Contoh: 1,2,3,4,5</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="setA">Himpunan A:</label>
+            <input type="text" id="setA" placeholder="Contoh: 1,2,3,4,5">
+        </div>
+        
+        <div class="input-group">
+            <label for="setB">Himpunan B:</label>
+            <input type="text" id="setB" placeholder="Contoh: 4,5,6,7,8">
+        </div>
+        
+        <div class="operations">
+            <button onclick="union()">Gabungan (A ∪ B)</button>
+            <button onclick="intersection()">Irisan (A ∩ B)</button>
+            <button onclick="difference('A-B')">Selisih (A - B)</button>
+            <button onclick="difference('B-A')">Selisih (B - A)</button>
+            <button onclick="symmetricDifference()">Beda Setangkup (A △ B)</button>
+        </div>
+        
+        <div class="result" id="result">
+            Hasil akan ditampilkan di sini.
+        </div>
+    </div>
+
+    <script>
+        // Fungsi untuk mengubah string input menjadi array himpunan
+        function parseSet(input) {
+            if (!input.trim()) return new Set();
+            return new Set(input.split(',').map(item => item.trim()));
+        }
+        
+        // Fungsi untuk menampilkan hasil
+        function displayResult(operation, result) {
+            document.getElementById('result').innerHTML = `
+                <strong>${operation}:</strong> {${Array.from(result).join(', ')}}
+            `;
+        }
+        
+        // Operasi Gabungan (Union)
+        function union() {
+            const setA = parseSet(document.getElementById('setA').value);
+            const setB = parseSet(document.getElementById('setB').value);
+            
+            const unionSet = new Set([...setA, ...setB]);
+            
+            displayResult('Gabungan (A ∪ B)', unionSet);
+        }
+        
+        // Operasi Irisan (Intersection)
+        function intersection() {
+            const setA = parseSet(document.getElementById('setA').value);
+            const setB = parseSet(document.getElementById('setB').value);
+            
+            const intersectionSet = new Set(
+                [...setA].filter(item => setB.has(item))
+            );
+            
+            displayResult('Irisan (A ∩ B)', intersectionSet);
+        }
+        
+        // Operasi Selisih (Difference)
+        function difference(type) {
+            const setA = parseSet(document.getElementById('setA').value);
+            const setB = parseSet(document.getElementById('setB').value);
+            
+            let differenceSet;
+            let operationName;
+            
+            if (type === 'A-B') {
+                differenceSet = new Set(
+                    [...setA].filter(item => !setB.has(item))
+                );
+                operationName = 'Selisih (A - B)';
+            } else {
+                differenceSet = new Set(
+                    [...setB].filter(item => !setA.has(item))
+                );
+                operationName = 'Selisih (B - A)';
+            }
+            
+            displayResult(operationName, differenceSet);
+        }
+        
+        // Operasi Beda Setangkup (Symmetric Difference)
+        function symmetricDifference() {
+            const setA = parseSet(document.getElementById('setA').value);
+            const setB = parseSet(document.getElementById('setB').value);
+            
+            const symmetricDifferenceSet = new Set(
+                [...[...setA].filter(item => !setB.has(item)),
+                 ...[...setB].filter(item => !setA.has(item))]
+            );
+            
+            displayResult('Beda Setangkup (A △ B)', symmetricDifferenceSet);
+        }
+    </script>
+</body>
+</html>
