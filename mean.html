@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Mean</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            height: 100px;
+            resize: vertical;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .mean-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2E7D32;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        .stat-item {
+            text-align: center;
+            flex: 1;
+            padding: 10px;
+            background-color: #f1f8e9;
+            border-radius: 4px;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Kalkulator Mean (Rata-rata)</h1>
+        
+        <div class="instructions">
+            <p>Petunjuk: Masukkan angka-angka yang akan dihitung rata-ratanya, dipisahkan dengan koma atau baris baru.</p>
+        </div>
+        
+        <div class="input-group">
+            <label for="numbers">Masukkan Angka:</label>
+            <textarea id="numbers" placeholder="Contoh: 10, 20, 30, 40, 50&#10;atau&#10;10&#10;20&#10;30&#10;40&#10;50"></textarea>
+        </div>
+        
+        <button onclick="calculateMean()">Hitung Mean</button>
+        
+        <div class="result" id="result">
+            <p>Hasil akan ditampilkan di sini.</p>
+        </div>
+    </div>
+
+    <script>
+        function calculateMean() {
+            // Ambil input dari textarea
+            const input = document.getElementById('numbers').value;
+            
+            // Bersihkan input dan ubah menjadi array angka
+            const numbers = input
+                .replace(/\n/g, ',') // Ganti baris baru dengan koma
+                .split(',') // Pisahkan berdasarkan koma
+                .map(num => num.trim()) // Hapus spasi di awal dan akhir
+                .filter(num => num !== '') // Hapus string kosong
+                .map(num => parseFloat(num)) // Ubah string menjadi angka
+                .filter(num => !isNaN(num)); // Hapus nilai yang bukan angka
+            
+            // Periksa apakah ada angka yang valid
+            if (numbers.length === 0) {
+                document.getElementById('result').innerHTML = `
+                    <p>Tidak ada angka valid yang dimasukkan.</p>
+                `;
+                return;
+            }
+            
+            // Hitung jumlah
+            const sum = numbers.reduce((total, num) => total + num, 0);
+            
+            // Hitung mean (rata-rata)
+            const mean = sum / numbers.length;
+            
+            // Hitung nilai minimum dan maksimum
+            const min = Math.min(...numbers);
+            const max = Math.max(...numbers);
+            
+            // Tampilkan hasil
+            document.getElementById('result').innerHTML = `
+                <p>Mean dari ${numbers.length} angka adalah:</p>
+                <p class="mean-value">${mean.toFixed(2)}</p>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <strong>Jumlah</strong>
+                        <p>${sum.toFixed(2)}</p>
+                    </div>
+                    <div class="stat-item">
+                        <strong>Minimum</strong>
+                        <p>${min.toFixed(2)}</p>
+                    </div>
+                    <div class="stat-item">
+                        <strong>Maksimum</strong>
+                        <p>${max.toFixed(2)}</p>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
