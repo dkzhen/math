@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/himpunan.html" },
+    { "source": "/mean", "destination": "/mean.html" }
+  ]
+}
